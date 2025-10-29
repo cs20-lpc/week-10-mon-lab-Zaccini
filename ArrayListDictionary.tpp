@@ -35,9 +35,11 @@ Val ArrayListDictionary<Key, Val>::binSearchIter(const Key& target, int left, in
         }
         else if (list->getElement(mid).k < target) {
             left = mid + 1;
+            numComps++;
         }
         else {
             right = mid - 1;
+            numComps++;
         }
     }
     throw string("binSearchIter: error, target key not found");
@@ -55,10 +57,12 @@ Val ArrayListDictionary<Key, Val>::binSearchRec(const Key& target, int left, int
         return list->getElement(mid).v;
     }
     else if (list->getElement(mid).k < target) {
+        numComps++;
         return binSearchRec(target, mid + 1, right);
     }
     else {
-        return binSearchRec(target, left, mid - 1);
+        numComps++;
+        return binSearchRec(target, left, mid - 1); 
     }
 }
 
@@ -77,10 +81,10 @@ Val ArrayListDictionary<Key, Val>::find(const Key& k) const {
     numComps = 0;
 
     try {
-        return seqSearchIter(k);
+        // return seqSearchIter(k);
         // return seqSearchRec(k);
         // return binSearchIter(k, 0, list->getLength() - 1);
-        // return binSearchRec(k, 0, list->getLength() - 1);
+        return binSearchRec(k, 0, list->getLength() - 1);
     }
     catch (...) {
         throw string("find: error, unsuccessful search, target key not found");
